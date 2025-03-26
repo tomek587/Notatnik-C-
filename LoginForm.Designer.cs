@@ -2,7 +2,6 @@
 {
     partial class LoginForm
     {
-        private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.TextBox txtLogin;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnLogin;
