@@ -6,10 +6,59 @@ namespace Notatnik
 {
     public class Database
     {
-        // Połączenie z bazą danych
-        string connectionString = "Server=localhost;Database=notatnik;User ID=root;Password=;SslMode=none;";
+        private string connectionString = "Server=localhost;User ID=root;Password=;SslMode=none;";
 
-        // Sprawdzenie, czy użytkownik istnieje
+        public Database()
+        {
+            CreateDatabaseIfNotExists();
+        }
+
+        private void CreateDatabaseIfNotExists()
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand cmdCheckDatabase = new MySqlCommand("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'notatnik'", conn);
+                var result = cmdCheckDatabase.ExecuteScalar();
+
+                if (result == null)
+                {
+                    MySqlCommand cmdCreateDatabase = new MySqlCommand("CREATE DATABASE notatnik", conn);
+                    cmdCreateDatabase.ExecuteNonQuery();
+                }
+            }
+
+            connectionString = "Server=localhost;Database=notatnik;User ID=root;Password=;SslMode=none;";
+            CreateTablesIfNotExists();
+        }
+
+        private void CreateTablesIfNotExists()
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string createUsersTable = @"
+                    CREATE TABLE IF NOT EXISTS users (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        login VARCHAR(255) NOT NULL UNIQUE,
+                        password VARCHAR(255) NOT NULL
+                    )";
+                MySqlCommand cmdCreateUsersTable = new MySqlCommand(createUsersTable, conn);
+                cmdCreateUsersTable.ExecuteNonQuery();
+
+                string createNotatkiTable = @"
+                    CREATE TABLE IF NOT EXISTS notatki (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        tresc TEXT NOT NULL,
+                        user_id INT,
+                        FOREIGN KEY (user_id) REFERENCES users(id)
+                    )";
+                MySqlCommand cmdCreateNotatkiTable = new MySqlCommand(createNotatkiTable, conn);
+                cmdCreateNotatkiTable.ExecuteNonQuery();
+            }
+        }
+
         public bool CheckUser(string login, string password)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -22,7 +71,6 @@ namespace Notatnik
             }
         }
 
-        // Sprawdzenie, czy użytkownik już istnieje
         public bool CheckUserExists(string login)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -34,7 +82,6 @@ namespace Notatnik
             }
         }
 
-        // Dodanie nowego użytkownika
         public void InsertUser(string login, string password)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -47,7 +94,6 @@ namespace Notatnik
             }
         }
 
-        // Pobranie notatek dla danego użytkownika
         public DataTable SelectNotatkiByUser(string login)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -62,7 +108,6 @@ namespace Notatnik
             }
         }
 
-        // Dodanie nowej notatki
         public void InsertNotatka(string tresc, string login)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -75,35 +120,35 @@ namespace Notatnik
             }
         }
 
-        // Usunięcie notatki
-        public void DeleteNotatka(int index, string login)
+        public void DeleteNotatkaById(int noteId, string login)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
 
-                // Pobranie ID notatki, którą chcemy usunąć
-                MySqlCommand cmdSelect = new MySqlCommand(
-                    "SELECT id FROM notatki WHERE user_id = (SELECT id FROM users WHERE login = @login) LIMIT 1 OFFSET @index", conn);
-                cmdSelect.Parameters.AddWithValue("@login", login);
-                cmdSelect.Parameters.AddWithValue("@index", index);
+                MySqlCommand cmdDelete = new MySqlCommand("DELETE FROM notatki WHERE id = @id AND user_id = (SELECT id FROM users WHERE login = @login)", conn);
+                cmdDelete.Parameters.AddWithValue("@id", noteId);
+                cmdDelete.Parameters.AddWithValue("@login", login);
+                int rowsAffected = cmdDelete.ExecuteNonQuery();
 
-                object result = cmdSelect.ExecuteScalar();
-
-                if (result != null)
+                if (rowsAffected == 0)
                 {
-                    int notatkaId = Convert.ToInt32(result);
-
-                    // Usunięcie notatki o pobranym ID
-                    MySqlCommand cmdDelete = new MySqlCommand("DELETE FROM notatki WHERE id = @id", conn);
-                    cmdDelete.Parameters.AddWithValue("@id", notatkaId);
-                    cmdDelete.ExecuteNonQuery();
-                }
-                else
-                {
-                    // Jeżeli nie znaleziono notatki
                     throw new Exception("Nie znaleziono notatki do usunięcia!");
                 }
+            }
+        }
+
+        public DataTable SelectNotatkaById(int notatkaId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM notatki WHERE id = @id", conn);
+                cmd.Parameters.AddWithValue("@id", notatkaId);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                return dt;
             }
         }
     }

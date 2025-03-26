@@ -10,86 +10,100 @@
         private System.Windows.Forms.Button btnUsun;
         private System.Windows.Forms.Button btnWyloguj;
 
+        /// <summary>
+        /// Wymagana metoda dla obsługi czyszczenia zasobów.
+        /// </summary>
+        /// <param name="disposing">True, jeśli zarządzane zasoby mają być usunięte; w przeciwnym razie False.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         private void InitializeComponent()
         {
-            lblWelcome = new Label();
-            lstNotatki = new ListBox();
-            txtNotatka = new TextBox();
-            btnDodaj = new Button();
-            btnUsun = new Button();
-            btnWyloguj = new Button();
-            SuspendLayout();
+            this.lblWelcome = new System.Windows.Forms.Label();
+            this.lstNotatki = new System.Windows.Forms.ListBox();
+            this.txtNotatka = new System.Windows.Forms.TextBox();
+            this.btnDodaj = new System.Windows.Forms.Button();
+            this.btnUsun = new System.Windows.Forms.Button();
+            this.btnWyloguj = new System.Windows.Forms.Button();
+            this.SuspendLayout();
             // 
             // lblWelcome
             // 
-            lblWelcome.AutoSize = true;
-            lblWelcome.Location = new Point(12, 9);
-            lblWelcome.Name = "lblWelcome";
-            lblWelcome.Size = new Size(65, 15);
-            lblWelcome.TabIndex = 0;
-            lblWelcome.Text = "Witaj, user!";
+            this.lblWelcome.AutoSize = true;
+            this.lblWelcome.Location = new System.Drawing.Point(12, 9);
+            this.lblWelcome.Name = "lblWelcome";
+            this.lblWelcome.Size = new System.Drawing.Size(65, 15);
+            this.lblWelcome.TabIndex = 0;
+            this.lblWelcome.Text = "Witaj, user!";
             // 
             // lstNotatki
             // 
-            lstNotatki.FormattingEnabled = true;
-            lstNotatki.ItemHeight = 15;
-            lstNotatki.Location = new Point(15, 40);
-            lstNotatki.Name = "lstNotatki";
-            lstNotatki.Size = new Size(300, 139);
-            lstNotatki.TabIndex = 1;
+            this.lstNotatki.FormattingEnabled = true;
+            this.lstNotatki.ItemHeight = 15;
+            this.lstNotatki.Location = new System.Drawing.Point(15, 40);
+            this.lstNotatki.Name = "lstNotatki";
+            this.lstNotatki.Size = new System.Drawing.Size(300, 139);
+            this.lstNotatki.TabIndex = 1;
+            this.lstNotatki.SelectedIndexChanged += new System.EventHandler(this.lstNotatki_SelectedIndexChanged);
             // 
             // txtNotatka
             // 
-            txtNotatka.Location = new Point(15, 200);
-            txtNotatka.Multiline = true;
-            txtNotatka.Name = "txtNotatka";
-            txtNotatka.Size = new Size(300, 80);
-            txtNotatka.TabIndex = 2;
+            this.txtNotatka.Location = new System.Drawing.Point(15, 200);
+            this.txtNotatka.Multiline = true;
+            this.txtNotatka.Name = "txtNotatka";
+            this.txtNotatka.Size = new System.Drawing.Size(300, 80);
+            this.txtNotatka.TabIndex = 2;
             // 
             // btnDodaj
             // 
-            btnDodaj.Location = new Point(15, 300);
-            btnDodaj.Name = "btnDodaj";
-            btnDodaj.Size = new Size(75, 23);
-            btnDodaj.TabIndex = 3;
-            btnDodaj.Text = "Dodaj";
-            btnDodaj.UseVisualStyleBackColor = true;
-            btnDodaj.Click += btnDodaj_Click;
+            this.btnDodaj.Location = new System.Drawing.Point(15, 300);
+            this.btnDodaj.Name = "btnDodaj";
+            this.btnDodaj.Size = new System.Drawing.Size(75, 23);
+            this.btnDodaj.TabIndex = 3;
+            this.btnDodaj.Text = "Dodaj";
+            this.btnDodaj.UseVisualStyleBackColor = true;
+            this.btnDodaj.Click += new System.EventHandler(this.btnDodaj_Click);
             // 
             // btnUsun
             // 
-            btnUsun.Location = new Point(115, 300);
-            btnUsun.Name = "btnUsun";
-            btnUsun.Size = new Size(75, 23);
-            btnUsun.TabIndex = 4;
-            btnUsun.Text = "Usuń";
-            btnUsun.UseVisualStyleBackColor = true;
-            btnUsun.Click += btnUsun_Click;
+            this.btnUsun.Location = new System.Drawing.Point(115, 300);
+            this.btnUsun.Name = "btnUsun";
+            this.btnUsun.Size = new System.Drawing.Size(75, 23);
+            this.btnUsun.TabIndex = 4;
+            this.btnUsun.Text = "Usuń";
+            this.btnUsun.UseVisualStyleBackColor = true;
+            this.btnUsun.Click += new System.EventHandler(this.btnUsun_Click);
             // 
             // btnWyloguj
             // 
-            btnWyloguj.Location = new Point(220, 300);
-            btnWyloguj.Name = "btnWyloguj";
-            btnWyloguj.Size = new Size(75, 23);
-            btnWyloguj.TabIndex = 5;
-            btnWyloguj.Text = "Wyloguj";
-            btnWyloguj.UseVisualStyleBackColor = true;
-            btnWyloguj.Click += btnWyloguj_Click;
+            this.btnWyloguj.Location = new System.Drawing.Point(220, 300);
+            this.btnWyloguj.Name = "btnWyloguj";
+            this.btnWyloguj.Size = new System.Drawing.Size(75, 23);
+            this.btnWyloguj.TabIndex = 5;
+            this.btnWyloguj.Text = "Wyloguj";
+            this.btnWyloguj.UseVisualStyleBackColor = true;
+            this.btnWyloguj.Click += new System.EventHandler(this.btnWyloguj_Click);
             // 
             // MainForm
             // 
-            ClientSize = new Size(340, 350);
-            Controls.Add(btnWyloguj);
-            Controls.Add(btnUsun);
-            Controls.Add(btnDodaj);
-            Controls.Add(txtNotatka);
-            Controls.Add(lstNotatki);
-            Controls.Add(lblWelcome);
-            Name = "MainForm";
-            Text = "Notatnik";
-            Load += MainForm_Load;
-            ResumeLayout(false);
-            PerformLayout();
+            this.ClientSize = new System.Drawing.Size(340, 350);
+            this.Controls.Add(this.btnWyloguj);
+            this.Controls.Add(this.btnUsun);
+            this.Controls.Add(this.btnDodaj);
+            this.Controls.Add(this.txtNotatka);
+            this.Controls.Add(this.lstNotatki);
+            this.Controls.Add(this.lblWelcome);
+            this.Name = "MainForm";
+            this.Text = "Notatnik";
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
     }
 }

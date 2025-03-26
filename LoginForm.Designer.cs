@@ -16,14 +16,14 @@
             // 
             // txtLogin
             // 
-            this.txtLogin.Location = new System.Drawing.Point(150, 50); // odpowiednia lokalizacja
+            this.txtLogin.Location = new System.Drawing.Point(150, 50);
             this.txtLogin.Name = "txtLogin";
             this.txtLogin.Size = new System.Drawing.Size(200, 22);
             this.txtLogin.TabIndex = 0;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(150, 100); // odpowiednia lokalizacja
+            this.txtPassword.Location = new System.Drawing.Point(150, 100);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(200, 22);
             this.txtPassword.TabIndex = 1;
@@ -31,7 +31,7 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(150, 150); // odpowiednia lokalizacja
+            this.btnLogin.Location = new System.Drawing.Point(150, 150);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(200, 30);
             this.btnLogin.TabIndex = 2;
